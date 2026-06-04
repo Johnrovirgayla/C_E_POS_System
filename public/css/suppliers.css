@@ -1,0 +1,78 @@
+/* ==================== SUPPLIERS STYLES ==================== */
+
+.suppliers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.supplier-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.supplier-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-5px);
+}
+
+.supplier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #334155;
+}
+
+.supplier-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.supplier-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.supplier-actions button {
+    background: none;
+    border: none;
+    color: #60a5fa;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.supplier-actions button:hover {
+    color: #3b82f6;
+}
+
+.supplier-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.info-icon {
+    font-size: 16px;
+    color: #60a5fa;
+}
+
+.supplier-contact {
+    font-weight: 600;
+    color: #e2e8f0;
+}
