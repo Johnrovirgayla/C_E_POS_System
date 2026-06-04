@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicken & Egg POS System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/pos.css">
+    <link rel="stylesheet" href="css/products.css">
+    <link rel="stylesheet" href="css/inventory.css">
+    <link rel="stylesheet" href="css/suppliers.css">
+    <link rel="stylesheet" href="css/customers.css">
+    <link rel="stylesheet" href="css/expenses.css">
+    <link rel="stylesheet" href="css/reports.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>🐔 C&E POS</h1>
+                <p>Chicken & Egg</p>
+            </div>
+            
+            <nav class="menu">
+                <button class="menu-item active" data-module="dashboard">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="menu-item" data-module="pos">
+                    <span class="icon">💳</span>
+                    <span>Point of Sale</span>
+                </button>
+                <button class="menu-item" data-module="products">
+                    <span class="icon">📦</span>
+                    <span>Products</span>
+                </button>
+                <button class="menu-item" data-module="inventory">
+                    <span class="icon">📈</span>
+                    <span>Inventory</span>
+                </button>
+                <button class="menu-item" data-module="suppliers">
+                    <span class="icon">🚚</span>
+                    <span>Suppliers</span>
+                </button>
+                <button class="menu-item" data-module="purchase-orders">
+                    <span class="icon">📋</span>
+                    <span>Purchase Orders</span>
+                </button>
+                <button class="menu-item" data-module="customers">
+                    <span class="icon">👥</span>
+                    <span>Customers</span>
+                </button>
+                <button class="menu-item" data-module="expenses">
+                    <span class="icon">💰</span>
+                    <span>Expenses</span>
+                </button>
+                <button class="menu-item" data-module="reports">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </button>
+                <button class="menu-item" data-module="notifications">
+                    <span class="icon">🔔</span>
+                    <span>Notifications</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="toggle-sidebar">☰</button>
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span>Admin User</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=667eea&color=fff" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Modules Container -->
+            <div class="modules-container">
+                <!-- Dashboard Module -->
+                <section id="dashboard" class="module">
+                    <div class="dashboard-grid">
+                        <!-- Stats Cards -->
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-icon">💵</div>
+                                <div class="stat-content">
+                                    <p>Daily Sales</p>
+                                    <h3 id="daily-sales">₱0.00</h3>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📊</div>
+                                <div class="stat-content">
+                                    <p>Transactions</p>
+                                    <h3 id="transactions-today">0</h3>
+                                </div>
+                            </div>
+                            <div class="stat-card warning">
+                                <div class="stat-icon">⚠️</div>
+                                <div class="stat-content">
+                                    <p>Low Stock Items</p>
+                                    <h3 id="low-stock">0</h3>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">👥</div>
+                                <div class="stat-content">
+                                    <p>Total Customers</p>
+                                    <h3 id="total-customers">0</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts -->
+                        <div class="charts-container">
+                            <div class="chart-card">
+                                <h3>Weekly Sales</h3>
+                                <canvas id="weeklySalesChart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <h3>Sales by Category</h3>
+                                <canvas id="categorySalesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions -->
+                        <div class="transactions-card">
+                            <h3>Recent Transactions</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Payment</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-transactions">
+                                    <tr><td colspan="5">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Best Sellers -->
+                        <div class="best-sellers-card">
+                            <h3>Best Sellers</h3>
+                            <div id="best-sellers-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Point of Sale Module -->
+                <section id="pos" class="module" style="display: none;">
+                    <div class="pos-layout">
+                        <div class="pos-products">
+                            <div class="pos-header">
+                                <h3>Products</h3>
+                                <input type="search" id="product-search" placeholder="Search products...">
+                                <select id="category-filter">
+                                    <option value="">All Categories</option>
+                                </select>
+                            </div>
+                            <div class="product-grid" id="product-grid"></div>
+                        </div>
+
+                        <div class="pos-cart">
+                            <h3>Shopping Cart</h3>
+                            <div class="cart-items" id="cart-items"></div>
+                            <div class="cart-summary">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">₱0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Discount:</span>
+                                    <span id="discount">₱0.00</span>
+                                </div>
+                                <div class="summary-row discount-options">
+                                    <label>
+                                        <input type="checkbox" id="senior-pwd-discount"> Senior/PWD (10%)
+                                    </label>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total:</span>
+                                    <span id="total">₱0.00</span>
+                                </div>
+                            </div>
+
+                            <div class="payment-section">
+                                <h4>Payment Method</h4>
+                                <div class="payment-options">
+                                    <label>
+                                        <input type="radio" name="payment" value="Cash" checked> Cash
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="payment" value="GCash"> GCash
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="payment" value="Maya"> Maya
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary" id="checkout-btn">Process Payment</button>
+                            <button class="btn-secondary" id="clear-cart-btn">Clear Cart</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Products Module -->
+                <section id="products" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Product Management</h3>
+                        <button class="btn-primary" id="add-product-btn">+ Add Product</button>
+                    </div>
+
+                    <div class="filter-bar">
+                        <select id="products-category-filter">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Cost</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table"></tbody>
+                    </table>
+                </section>
+
+                <!-- Inventory Module -->
+                <section id="inventory" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Inventory Management</h3>
+                        <button class="btn-primary" id="stock-in-btn">📥 Stock In</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Stock Level</th>
+                                <th>Status</th>
+                                <th>Reorder Level</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table"></tbody>
+                    </table>
+                </section>
+
+                <!-- Suppliers Module -->
+                <section id="suppliers" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Supplier Management</h3>
+                        <button class="btn-primary" id="add-supplier-btn">+ Add Supplier</button>
+                    </div>
+
+                    <div class="suppliers-grid" id="suppliers-grid"></div>
+                </section>
+
+                <!-- Purchase Orders Module -->
+                <section id="purchase-orders" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Purchase Orders</h3>
+                        <button class="btn-primary" id="create-po-btn">+ Create PO</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>PO Number</th>
+                                <th>Supplier</th>
+                                <th>Order Date</th>
+                                <th>Expected Delivery</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="po-table"></tbody>
+                    </table>
+                </section>
+
+                <!-- Customers Module -->
+                <section id="customers" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Customer Management</h3>
+                        <button class="btn-primary" id="add-customer-btn">+ Add Customer</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Loyalty Points</th>
+                                <th>Tier</th>
+                                <th>Total Purchases</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-table"></tbody>
+                    </table>
+                </section>
+
+                <!-- Expenses Module -->
+                <section id="expenses" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Expense Management</h3>
+                        <button class="btn-primary" id="add-expense-btn">+ Add Expense</button>
+                    </div>
+
+                    <div class="expense-summary">
+                        <div class="expense-card">
+                            <p>Total Expenses (This Month)</p>
+                            <h3 id="monthly-expenses">₱0.00</h3>
+                        </div>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenses-table"></tbody>
+                    </table>
+                </section>
+
+                <!-- Reports Module -->
+                <section id="reports" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Business Reports</h3>
+                    </div>
+
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <h4>Sales Trend (Last 30 Days)</h4>
+                            <canvas id="salesTrendChart"></canvas>
+                        </div>
+                        <div class="report-card">
+                            <h4>Inventory Value by Category</h4>
+                            <canvas id="inventoryValueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="financial-summary">
+                        <h4>Financial Summary</h4>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <span>Total Sales</span>
+                                <h3 id="total-sales-report">₱0.00</h3>
+                            </div>
+                            <div class="summary-item">
+                                <span>Total Expenses</span>
+                                <h3 id="total-expenses-report">₱0.00</h3>
+                            </div>
+                            <div class="summary-item profit">
+                                <span>Net Profit</span>
+                                <h3 id="net-profit">₱0.00</h3>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications Module -->
+                <section id="notifications" class="module" style="display: none;">
+                    <div class="section-header">
+                        <h3>Alerts & Notifications</h3>
+                    </div>
+
+                    <div class="notifications-list" id="notifications-list"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay"></div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <h3>Product Form</h3>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <input type="text" id="product-name" placeholder="Product Name" required>
+                <select id="product-category" required></select>
+                <input type="text" id="product-sku" placeholder="SKU" required>
+                <input type="number" id="product-price" placeholder="Price" step="0.01" required>
+                <input type="number" id="product-cost" placeholder="Cost" step="0.01" required>
+                <input type="number" id="product-stock" placeholder="Stock" required>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="button" class="btn-secondary close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stock In Modal -->
+    <div id="stock-in-modal" class="modal">
+        <div class="modal-content">
+            <h3>Stock In</h3>
+            <form id="stock-in-form">
+                <select id="stock-in-product" required></select>
+                <input type="number" id="stock-in-quantity" placeholder="Quantity" required>
+                <input type="text" id="stock-in-reference" placeholder="Reference (PO/Invoice)">
+                <textarea id="stock-in-notes" placeholder="Notes"></textarea>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Confirm</button>
+                    <button type="button" class="btn-secondary close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Supplier Modal -->
+    <div id="supplier-modal" class="modal">
+        <div class="modal-content">
+            <h3>Supplier Form</h3>
+            <form id="supplier-form">
+                <input type="hidden" id="supplier-id">
+                <input type="text" id="supplier-name" placeholder="Supplier Name" required>
+                <input type="text" id="supplier-contact" placeholder="Contact Person" required>
+                <input type="tel" id="supplier-phone" placeholder="Phone" required>
+                <input type="email" id="supplier-email" placeholder="Email" required>
+                <input type="text" id="supplier-address" placeholder="Address" required>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="button" class="btn-secondary close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Customer Modal -->
+    <div id="customer-modal" class="modal">
+        <div class="modal-content">
+            <h3>Add Customer</h3>
+            <form id="customer-form">
+                <input type="text" id="customer-name" placeholder="Customer Name" required>
+                <input type="tel" id="customer-phone" placeholder="Phone">
+                <input type="email" id="customer-email" placeholder="Email">
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="button" class="btn-secondary close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div id="expense-modal" class="modal">
+        <div class="modal-content">
+            <h3>Add Expense</h3>
+            <form id="expense-form">
+                <select id="expense-category" required>
+                    <option value="">Select Category</option>
+                    <option value="Utilities">Utilities</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Office">Office</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="number" id="expense-amount" placeholder="Amount" step="0.01" required>
+                <textarea id="expense-description" placeholder="Description"></textarea>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button type="button" class="btn-secondary close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div id="receipt-modal" class="modal">
+        <div class="modal-content">
+            <div id="receipt-content"></div>
+            <div class="modal-buttons">
+                <button type="button" class="btn-primary" id="print-receipt">🖨️ Print</button>
+                <button type="button" class="btn-secondary close-modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/pos.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/suppliers.js"></script>
+    <script src="js/customers.js"></script>
+    <script src="js/expenses.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
